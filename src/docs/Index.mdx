@@ -1,0 +1,22 @@
+# Nostalgie
+
+> Nostalgie means _nostalgia_ in French. It is an ode to a simpler time, when web development just meant web development. A time when devops and tooling were not required skills to deploy a modern web site.
+
+Nostalgie is the easiest way to build a modern, performant web app or web site using React. It is both a [_Compiler_](#compiler) and a [_Framework_](#framework). It aspires to have a strong opinion and comprehensive solution for they key [_Primitives_](#primitives) of a modern web app or web site.
+
+## Primitives
+
+Nostalgie includes the key primitives that we think _every_ modern web app needs.
+
+- **Routing** - Web sites and web apps live on the web. The web operates on the basis of routes. Those routes are fundamental to anything that lives on the web and so Nostalgie has a complete [Routing Solution](/docs/features/routing).
+
+- **Authentication** - Web sites and web apps are visited by different people. We speculate that the vast majority of sites will eventually want to understand _who_ is at the screen. Nostalgie provides [Authentication and Authorization](/docs/features/auth) support out of the box. It connects to any [OpenID](https://openid.net/) provider and handles the tricky parts.
+
+- **SEO** - As citizens of the web, we guess that most web pages aim to be found. One of the challenges when building a single-page application (SPA) is exposing content and metadata to web crawlers. Nostalgie is primarily a server-side rendering (SSR) engine. That means that it will serve fully-hydrated markup in the initial request. Nostalgie makes it easy to set `<meta>` and `<link>` right from within your React application so that they are readable by browsers. The [Markup](/docs/features/markup) module gives all the primitives needed to fine-tune your SSR and client-side rendered (CSR) HTML markup.
+
+- **Serverless functions**: Expose functions that should run on the back-end directly to the front-end without worrying about http and fetch. You define your back-end functions and call it directly from the front-end using the [`useQueryFunction`](/docs/features/functions#usequeryfunction) and [`useMutationFunction`](/docs/features/functions#usermutationfunction) hooks. These hooks are automatically wired up to your back-end functions and the built-in authentication system. These delegate to the [`useQuery`](https://react-query.tanstack.com/reference/useQuery) and [`useMutation`](https://react-query.tanstack.com/reference/useMutation) hooks exposed by the excellent [`react-query`]() library. Functions results will be automatically included in server-side-rendered pages (up to a configurable time budget deadline). On the client, render while you fetch and move on to getting the business logic shipped.
+
+
+## Compiler
+
+## Framework

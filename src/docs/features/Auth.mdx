@@ -1,0 +1,73 @@
+# Auth
+
+Nostalgie provides an integrated authentication and authorization solution for any OpenID-compliant issuer.
+
+The functionality is exposed by the `nostalgie/auth` module.
+
+```ts
+import { useAuth, withRequiredAuthentication } from 'nostalgie/auth';
+```
+
+## Enabling the auth module
+
+To enable Nostalgie's auth functionality, the following values must be configured in the environment:
+
+```sh
+# The OpenID issuer
+AUTH_ISSUER=https://...
+# The ClientID and Secrets for your Nostalgie application
+AUTH_CLIENT_ID=...
+AUTH_CLIENT_SECRET=...
+# A long, random string used to encrypt and sign session cookies
+AUTH_COOKIE_SECRET=...
+```
+
+## The `useAuth` hook
+
+The `useAuth` hook returns the current authentication state:
+
+```tsx
+export interface ClientAuthAuthenticated {
+  isAuthenticated: true;
+  credentials: {
+    audience?: string;
+    claims: IdTokenClaims;
+    scope: string[];
+    user: UserinfoResponse;
+    idToken: string;
+    accessToken: string;
+  };
+  loginUrl: string;
+  logoutUrl: string;
+}
+
+export interface ClientAuthUnauthenticated {
+  isAuthenticated: false;
+  error?: unknown;
+  loginUrl: string;
+  logoutUrl: string;
+}
+
+export type ClientAuth = ClientAuthAuthenticated | ClientAuthUnauthenticated;
+```
+
+For example, a React function component might make a decision based on the `.isAuthenticated` value to show a user menu or a login form in the nav bar.
+
+## The `withRequiredAuthentication` higher-order component
+
+The `withRequiredAuthentication` HOC can be used to wrap other components so that these only render when the user is authenticated. Additional conditions can be provided such as the user being authenticated with a given `scope` and / or `audience`:
+
+```tsx
+function AdminDashboard() {
+  return <p>Imagine this was a glorious admin dashboard</p>;
+}
+
+export default withRequiredAuthentication(AdminDashboard, {
+  audience: 'https://api.mything.foo',
+  scope: ['admin'],
+});
+```
+
+## Authenticating and authorizing server functions
+
+When authentication is enabled in a Nostalgie app, the current auth state is automatically provide on the `.auth` property of the first, `ctx` argument. See the [Server Functions Context](/docs/features/functions#context).
