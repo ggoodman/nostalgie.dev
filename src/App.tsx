@@ -1,25 +1,43 @@
-import { Link, Route, Switch, useRouteMatch } from 'nostalgie/routing';
+import { Link, Redirect, Route, Switch, useRouteMatch } from 'nostalgie/routing';
 import { MDXProvider, MDXProviderComponents, styled } from 'nostalgie/styling';
 import * as React from 'react';
-import { nav, NavChildren, NavKind, NavPage } from './docs';
+import { nav, NavChildren, NavKind } from './docs';
 import './styles/code.css';
 
 const DocsIndex = React.lazy(() => import('./docs/Index.mdx'));
 
-const Main = styled.main`
-  overflow-x: hidden;
-  margin-right: calc(-1 * (100vw - 100%));
+const ScrollMargin = styled.div`
+  padding-left: calc((100vw - 100%) / 2);
 `;
+// const ScrollPadding = styled.div`
+//   padding-right: calc(-1 * (100vw - 100%));
+// `;
 
 export const mdxDocsComponents: MDXProviderComponents = {
   blockquote: (props) => (
     <blockquote {...props} className="border-l-8 border-gray-200 bg-gray-100 rounded-md py-1" />
   ),
-  // code: (props) => <code {...props} className="font-mono inline-block bg-blue-900 text-gray-100" />,
   img: (props) => <img {...props} className="h-6 inline-block" />,
   pre: (props) => <pre {...props} className="bg-gray-800 overflow-auto" />,
   ul: (props) => <ul {...props} className="list-disc list-outside ml-8" />,
 };
+
+function NavbarLink(
+  props: React.PropsWithChildren<{
+    color: 'red' | 'yellow' | 'blue' | 'indigo' | 'purple' | 'pink' | 'green';
+    to: string;
+  }>
+) {
+  const match = useRouteMatch({ exact: false, path: props.to });
+  const activeClassNames = match
+    ? `border-${props.color}-700 hover:border-${props.color}-500`
+    : 'border-transparent';
+  return (
+    <Link className={`px-4 border-b-4 ${activeClassNames}`} to={props.to}>
+      {props.children}
+    </Link>
+  );
+}
 
 export default function App() {
   const pages = React.useMemo(() => {
@@ -47,41 +65,67 @@ export default function App() {
   return (
     <>
       <div className="flex flex-col max-h-screen h-screen overflow-hidden">
-        <div className="h-8 px-6 text-xl font-extrabold tracking-wider border-b border-gray-200">
-          <Link to="/">Nostalgie.dev</Link>
-        </div>
-        <div className="flex flex-1 flex-row overflow-hidden">
-          <nav className="w-60 px-2 py-4 flex-grow-0 flex-shrink-0 overflow-y-auto border-r border-gray-200">
-            <NavChildren nodes={nav} />
+        <div className="h-8 border-b border-gray-200">
+          <nav className="container flex flex-row mx-auto">
+            <div className="w-60 text-xl font-extrabold tracking-wider">
+              <Link to="/">Nostalgie.dev</Link>
+            </div>
+            <div className="pl-8 lg:px-16 flex flex-row items-center text-lg font-bold">
+              <NavbarLink color="indigo" to="/docs">
+                Docs
+              </NavbarLink>
+              <NavbarLink color="green" to="/changelog">
+                Changelog
+              </NavbarLink>
+            </div>
           </nav>
+        </div>
+        <div className="flex-1 overflow-x-hidden overflow-y-auto">
+          <React.Suspense fallback="">
+            <Switch>
+              <Route exact path="/">
+                <ScrollMargin className="py-4 container prose mx-auto">
+                  <DocsIndex></DocsIndex>
+                </ScrollMargin>
+              </Route>
+              <Route exact path="/docs">
+                <Redirect to="/docs/quickstart" />
+              </Route>
+              <Route path="/docs">
+                <ScrollMargin className="flex flex-row container mx-auto">
+                  <aside className="w-60 pr-2 py-4 flex-grow-0 flex-shrink-0 overflow-y-auto border-r border-gray-200">
+                    <NavChildren nodes={nav} />
+                  </aside>
 
-          <Main className="overflow-y-auto">
-            <MDXProvider components={mdxDocsComponents}>
-              <Switch>
-                <React.Suspense fallback="">
-                  <Route exact path="/">
-                    <div className="px-8 py-4 lg:px-16 container prose">
-                      <DocsIndex></DocsIndex>
-                    </div>
-                  </Route>
-                  {pages.map(({ Component, path }) => (
-                    <Route key={path} exact path={path}>
-                      <div className="px-8 py-4 lg:px-16 container prose">
-                        <Component></Component>
-                      </div>
-                    </Route>
-                  ))}
-                </React.Suspense>
-              </Switch>
-            </MDXProvider>
-          </Main>
+                  <div className="overflow-y-auto">
+                    <MDXProvider components={mdxDocsComponents}>
+                      <Switch>
+                        <React.Suspense fallback="">
+                          {pages.map(({ Component, path }) => (
+                            <Route key={path} exact path={path}>
+                              <div className="px-8 py-4 lg:px-16 container prose">
+                                <Component></Component>
+                              </div>
+                            </Route>
+                          ))}
+                        </React.Suspense>
+                      </Switch>
+                    </MDXProvider>
+                  </div>
+                </ScrollMargin>
+              </Route>
+              <Route path="/*">
+                <ScrollMargin className="flex flex-row container mx-auto">
+                  <h1 className="text-8xl">Page not found</h1>
+                </ScrollMargin>
+              </Route>
+            </Switch>
+          </React.Suspense>
         </div>
       </div>
     </>
   );
 }
-
-function DocsContent({ page, path = [''] }: { page: NavPage; path?: string[] }) {}
 
 const NavChildren = ({
   depth = 0,
@@ -102,7 +146,7 @@ const NavChildren = ({
             <li
               key={node.slug}
               className={`text-md font-normal leading-6 px-4 py-1 hover:bg-gray-300
-              rounded block ${match ? 'bg-blue-900 text-gray-100 hover:bg-blue-700' : ''}`}
+              rounded block ${match ? 'bg-indigo-900 text-gray-100 hover:bg-indigo-700' : ''}`}
             >
               <Link
                 is="a"
