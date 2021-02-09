@@ -5,6 +5,7 @@
   "description": "The nostalgie.dev website",
   "main": "index.js",
   "scripts": {
+    "build": "nostalgie build",
     "dev": "nostalgie dev --port 4242"
   },
   "repository": {
