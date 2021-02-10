@@ -81,38 +81,34 @@ export default function App() {
           </nav>
         </div>
         <div className="flex-1 overflow-x-hidden overflow-y-auto">
-          <React.Suspense fallback="">
+          <MDXProvider components={mdxDocsComponents}>
             <Switch>
               <Route exact path="/">
-                <ScrollMargin className="py-4 container prose mx-auto">
-                  <DocsIndex></DocsIndex>
-                </ScrollMargin>
+                <React.Suspense fallback="">
+                  <ScrollMargin className="py-4 container prose mx-auto">
+                    <DocsIndex></DocsIndex>
+                  </ScrollMargin>
+                </React.Suspense>
               </Route>
+              {pages.map(({ Component, path }) => (
+                <Route key={path} exact path={path}>
+                  <ScrollMargin className="flex flex-row container mx-auto">
+                    <aside className="w-60 pr-2 py-4 flex-grow-0 flex-shrink-0 overflow-y-auto border-r border-gray-200">
+                      <NavChildren nodes={nav} />
+                    </aside>
+
+                    <div className="overflow-y-auto">
+                      <React.Suspense fallback="">
+                        <div className="px-8 py-4 lg:px-16 container prose">
+                          <Component></Component>
+                        </div>
+                      </React.Suspense>
+                    </div>
+                  </ScrollMargin>
+                </Route>
+              ))}
               <Route exact path="/docs">
                 <Redirect to="/docs/quickstart" />
-              </Route>
-              <Route path="/docs">
-                <ScrollMargin className="flex flex-row container mx-auto">
-                  <aside className="w-60 pr-2 py-4 flex-grow-0 flex-shrink-0 overflow-y-auto border-r border-gray-200">
-                    <NavChildren nodes={nav} />
-                  </aside>
-
-                  <div className="overflow-y-auto">
-                    <MDXProvider components={mdxDocsComponents}>
-                      <Switch>
-                        <React.Suspense fallback="">
-                          {pages.map(({ Component, path }) => (
-                            <Route key={path} exact path={path}>
-                              <div className="px-8 py-4 lg:px-16 container prose">
-                                <Component></Component>
-                              </div>
-                            </Route>
-                          ))}
-                        </React.Suspense>
-                      </Switch>
-                    </MDXProvider>
-                  </div>
-                </ScrollMargin>
               </Route>
               <Route path="/*">
                 <ScrollMargin className="flex flex-row container mx-auto">
@@ -120,7 +116,7 @@ export default function App() {
                 </ScrollMargin>
               </Route>
             </Switch>
-          </React.Suspense>
+          </MDXProvider>
         </div>
       </div>
     </>
