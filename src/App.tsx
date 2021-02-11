@@ -6,6 +6,7 @@ import { nav, NavChildren, NavKind } from './docs';
 import './styles/code.css';
 
 const DocsIndex = React.lazy(() => import('./docs/Index.mdx'));
+const Changelog = React.lazy(() => import('./CHANGELOG.md'));
 
 const ScrollMargin = styled.div`
   padding-left: calc((100vw - 100%) / 2);
@@ -79,7 +80,7 @@ export default function App() {
       </Helmet>
       <div className="flex flex-col max-h-screen h-screen overflow-hidden">
         <div className="h-8 border-b border-gray-200">
-          <nav className="container flex flex-row mx-auto">
+          <nav className="container px-2 flex flex-row mx-auto">
             <div className="w-60 text-xl font-extrabold tracking-wider">
               <Link to="/">Nostalgie.dev</Link>
             </div>
@@ -98,8 +99,15 @@ export default function App() {
             <Switch>
               <Route exact path="/">
                 <React.Suspense fallback="">
-                  <ScrollMargin className="py-4 container prose mx-auto">
+                  <ScrollMargin className="py-4 container px-2 prose mx-auto">
                     <DocsIndex></DocsIndex>
+                  </ScrollMargin>
+                </React.Suspense>
+              </Route>
+              <Route exact path="/changelog">
+                <React.Suspense fallback="">
+                  <ScrollMargin className="py-4 container px-2 prose mx-auto">
+                    <Changelog></Changelog>
                   </ScrollMargin>
                 </React.Suspense>
               </Route>
@@ -109,14 +117,14 @@ export default function App() {
                     <title>{`Nostalgie - ${title}`}</title>
                     <meta name="description" content={description} />
                   </Helmet>
-                  <ScrollMargin className="flex flex-row container mx-auto">
+                  <ScrollMargin className="flex flex-row container px-2 mx-auto">
                     <aside className="w-60 pr-2 py-4 flex-grow-0 flex-shrink-0 overflow-y-auto border-r border-gray-200">
                       <NavChildren nodes={nav} />
                     </aside>
 
                     <div className="overflow-y-auto">
                       <React.Suspense fallback="">
-                        <div className="px-8 py-4 lg:px-16 container prose">
+                        <div className="px-8 py-4 lg:px-16 max-w-full prose">
                           <Component></Component>
                         </div>
                       </React.Suspense>
@@ -125,10 +133,10 @@ export default function App() {
                 </Route>
               ))}
               <Route exact path="/docs">
-                <Redirect to="/docs/quickstart" />
+                <Redirect to="/docs/tutorials/getting-started" />
               </Route>
               <Route path="/*">
-                <ScrollMargin className="flex flex-row container mx-auto">
+                <ScrollMargin className="flex flex-row container px-2 mx-auto">
                   <h1 className="text-8xl">Page not found</h1>
                 </ScrollMargin>
               </Route>

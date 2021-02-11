@@ -1,4 +1,5 @@
 import * as React from 'react';
+import * as GettingStartedTutorial from './tutorials/GettingStarted.mdx';
 
 export enum NavKind {
   Section,
@@ -24,11 +25,18 @@ export type NavChildren = Array<NavSection | NavPage>;
 
 export const nav: NavChildren = [
   {
-    kind: NavKind.Page,
-    title: 'Getting Started',
-    description: 'Learn to get started with Nostalgie, the full-stack React framework.',
-    slug: 'quickstart',
-    component: React.lazy(() => import('./Quickstart.mdx')),
+    kind: NavKind.Section,
+    title: 'Tutorials',
+    slug: 'tutorials',
+    children: [
+      {
+        kind: NavKind.Page,
+        title: GettingStartedTutorial.frontmatter['title'] as string,
+        description: GettingStartedTutorial.excerpt,
+        slug: GettingStartedTutorial.frontmatter['slug'] as string,
+        component: React.lazy(() => import('./tutorials/GettingStarted.mdx')),
+      },
+    ],
   },
   {
     kind: NavKind.Section,
@@ -66,6 +74,20 @@ export const nav: NavChildren = [
           'Learn to how easy it is to author and invoke server-side functions using Nostalgie, the full-stack React framework.',
         slug: 'functions',
         component: React.lazy(() => import('./features/Functions.mdx')),
+      },
+    ],
+  },
+  {
+    kind: NavKind.Section,
+    title: 'Discussions',
+    slug: 'discussions',
+    children: [
+      {
+        kind: NavKind.Page,
+        title: 'Key Concepts',
+        description: 'Learn about some key concepts in Nostalgie, the full-stack React framework.',
+        slug: 'key-concepts',
+        component: React.lazy(() => import('./discussions/Concepts.mdx')),
       },
     ],
   },
