@@ -1,5 +1,6 @@
 import * as React from 'react';
 import * as GettingStartedTutorial from './tutorials/GettingStarted.mdx';
+import * as ServerFunctionsTutorial from './tutorials/ServerFunctions.mdx';
 
 export enum NavKind {
   Section,
@@ -35,6 +36,13 @@ export const nav: NavChildren = [
         description: GettingStartedTutorial.excerpt,
         slug: GettingStartedTutorial.frontmatter['slug'] as string,
         component: React.lazy(() => import('./tutorials/GettingStarted.mdx')),
+      },
+      {
+        kind: NavKind.Page,
+        title: ServerFunctionsTutorial.frontmatter['title'] as string,
+        description: ServerFunctionsTutorial.excerpt,
+        slug: ServerFunctionsTutorial.frontmatter['slug'] as string,
+        component: React.lazy(() => import('./tutorials/ServerFunctions.mdx')),
       },
     ],
   },
