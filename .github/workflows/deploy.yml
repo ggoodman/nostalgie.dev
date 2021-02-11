@@ -1,0 +1,17 @@
+name: Deploy
+on:
+  push:
+    branches: [main]
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+    - id: deploy
+      uses: google-github-actions/deploy-cloudrun@main
+      with:
+        image: gcr.io/${{ secrets.GCP_PROJECT_ID }}/nostalgie.dev
+        service: ${{ secrets.GCP_CR_SERVICE }}
+        credentials: ${{ secrets.GCP_SA_KEY }}
+        env_vars: NODE_ENV=production
+        project_id: ${{ secrets.GCP_PROJECT_ID }}
+        region: ${{ secrets.GCP_CR_REGION }}
