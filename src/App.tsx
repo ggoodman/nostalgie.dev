@@ -1,3 +1,4 @@
+import { Helmet } from 'nostalgie/helmet';
 import { Link, Redirect, Route, Switch, useRouteMatch } from 'nostalgie/routing';
 import { MDXProvider, MDXProviderComponents, styled } from 'nostalgie/styling';
 import * as React from 'react';
@@ -49,7 +50,12 @@ export default function App() {
 
       switch (node.kind) {
         case NavKind.Page:
-          pages.push({ path: [...path, node.slug].join('/'), Component: node.component });
+          pages.push({
+            path: [...path, node.slug].join('/'),
+            Component: node.component,
+            title: node.title,
+            description: node.description,
+          });
           break;
         case NavKind.Section:
           queue.push(
@@ -64,6 +70,13 @@ export default function App() {
 
   return (
     <>
+      <Helmet>
+        <title>Nostalgie</title>
+        <meta
+          name="description"
+          content="Nostalgie is an opinionated, full-stack, runtime-agnostic framework for building web apps and web pages using React."
+        />
+      </Helmet>
       <div className="flex flex-col max-h-screen h-screen overflow-hidden">
         <div className="h-8 border-b border-gray-200">
           <nav className="container flex flex-row mx-auto">
@@ -90,8 +103,12 @@ export default function App() {
                   </ScrollMargin>
                 </React.Suspense>
               </Route>
-              {pages.map(({ Component, path }) => (
+              {pages.map(({ Component, path, title, description }) => (
                 <Route key={path} exact path={path}>
+                  <Helmet>
+                    <title>{`Nostalgie - ${title}`}</title>
+                    <meta name="description" content={description} />
+                  </Helmet>
                   <ScrollMargin className="flex flex-row container mx-auto">
                     <aside className="w-60 pr-2 py-4 flex-grow-0 flex-shrink-0 overflow-y-auto border-r border-gray-200">
                       <NavChildren nodes={nav} />
