@@ -7,6 +7,22 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [0.73.0] - 2021-02-12
+### Changed
+- Migrated from `@mdx-js/mdx` to `xdm` for a smaller, faster MDX runtime.
+
+## [0.72.1] - 2021-02-11
+### Fixed
+- Fixed calculation of `peerDependencies` range for `react` and `react-dom` to correctly use the hard-coded ranges.
+
+## [0.72.0] - 2021-02-11
+### Changed
+- Synced dependencies.
+
+### Fixed
+- Reintegrated `@twind/shim/server` now that it performs non-destructive edits to the markup apart from the `class` attribute values. Bonus: the markup parsing and augmentation is 50% faster.
+- Forced `react`, `react-dom`, `@types/react-dom` and `@types/react-dom-server` into `peerDependencies` using a range compatible with `>= 16.8.0` or `>= 17.0.0`. It remains to be seen if putting the types in peer dependencies is beneficial or a point of friction.
+
 ## [0.71.0] - 2021-02-11
 ### Added
 - Added support for picking among first-party `create-nostalgie-app` templates. With this release, we include `javascript` and `typescript`.
@@ -199,7 +215,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Introduced [`kacl`](https://npm.im/@brightcove/kacl) as a mechanism to lint and manage the changelog.
 - Introduced [`gh-release`](https://npm.im/gh-release) to produce releases on GitHub.
 
-[Unreleased]: https://github.com/ggoodman/nostalgie/compare/v0.71.0...HEAD
+[Unreleased]: https://github.com/ggoodman/nostalgie/compare/v0.73.0...HEAD
+[0.73.0]: https://github.com/ggoodman/nostalgie/compare/v0.72.1...v0.73.0
+[0.72.1]: https://github.com/ggoodman/nostalgie/compare/v0.72.0...v0.72.1
+[0.72.0]: https://github.com/ggoodman/nostalgie/compare/v0.71.0...v0.72.0
 [0.71.0]: https://github.com/ggoodman/nostalgie/compare/v0.70.0...v0.71.0
 [0.70.0]: https://github.com/ggoodman/nostalgie/compare/v0.69.4...v0.70.0
 [0.69.4]: https://github.com/ggoodman/nostalgie/compare/v0.69.3...v0.69.4

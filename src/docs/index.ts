@@ -1,3 +1,4 @@
+import type { MDXProps } from 'nostalgie/styling';
 import * as React from 'react';
 import * as GettingStartedTutorial from './tutorials/GettingStarted.mdx';
 
@@ -18,7 +19,7 @@ export interface NavPage {
   title: string;
   description: string;
   slug: string;
-  component: React.ElementType;
+  component: React.ElementType<MDXProps>;
 }
 
 export type NavChildren = Array<NavSection | NavPage>;

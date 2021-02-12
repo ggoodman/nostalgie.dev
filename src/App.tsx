@@ -1,6 +1,6 @@
 import { Helmet } from 'nostalgie/helmet';
 import { Link, Redirect, Route, Switch, useRouteMatch } from 'nostalgie/routing';
-import { MDXProvider, MDXProviderComponents, styled } from 'nostalgie/styling';
+import { MDXProviderComponents, styled } from 'nostalgie/styling';
 import * as React from 'react';
 import { nav, NavChildren, NavKind } from './docs';
 import './styles/code.css';
@@ -8,12 +8,9 @@ import './styles/code.css';
 const DocsIndex = React.lazy(() => import('./docs/Index.mdx'));
 const Changelog = React.lazy(() => import('./CHANGELOG.md'));
 
-const ScrollMargin = styled.div`
+const ScrollPadding = styled.div`
   padding-left: calc((100vw - 100%) / 2);
 `;
-// const ScrollPadding = styled.div`
-//   padding-right: calc(-1 * (100vw - 100%));
-// `;
 
 export const mdxDocsComponents: MDXProviderComponents = {
   blockquote: (props) => (
@@ -94,54 +91,56 @@ export default function App() {
             </div>
           </nav>
         </div>
-        <div className="flex-1 overflow-x-hidden overflow-y-auto">
-          <MDXProvider components={mdxDocsComponents}>
-            <Switch>
-              <Route exact path="/">
-                <React.Suspense fallback="">
-                  <ScrollMargin className="py-4 container px-2 prose mx-auto">
-                    <DocsIndex></DocsIndex>
-                  </ScrollMargin>
-                </React.Suspense>
-              </Route>
-              <Route exact path="/changelog">
-                <React.Suspense fallback="">
-                  <ScrollMargin className="py-4 container px-2 prose mx-auto">
-                    <Changelog></Changelog>
-                  </ScrollMargin>
-                </React.Suspense>
-              </Route>
-              {pages.map(({ Component, path, title, description }) => (
-                <Route key={path} exact path={path}>
-                  <Helmet>
-                    <title>{`Nostalgie - ${title}`}</title>
-                    <meta name="description" content={description} />
-                  </Helmet>
-                  <ScrollMargin className="flex flex-row container px-2 mx-auto">
-                    <aside className="w-60 pr-2 py-4 flex-grow-0 flex-shrink-0 overflow-y-auto border-r border-gray-200">
-                      <NavChildren nodes={nav} />
-                    </aside>
+        <div className="flex-1 overflow-x-hidden flex flex-col justify-items-stretch">
+          <Switch>
+            <Route exact path="/">
+              <React.Suspense fallback="">
+                <div className="px-2 py-4">
+                  <ScrollPadding className="prose container mx-auto">
+                    <DocsIndex components={mdxDocsComponents}></DocsIndex>
+                  </ScrollPadding>
+                </div>
+              </React.Suspense>
+            </Route>
+            <Route exact path="/changelog">
+              <React.Suspense fallback="">
+                <div className="px-2 py-4">
+                  <ScrollPadding className="prose container mx-auto">
+                    <Changelog components={mdxDocsComponents}></Changelog>
+                  </ScrollPadding>
+                </div>
+              </React.Suspense>
+            </Route>
+            {pages.map(({ Component, path, title, description }) => (
+              <Route key={path} exact path={path}>
+                <Helmet>
+                  <title>{`Nostalgie - ${title}`}</title>
+                  <meta name="description" content={description} />
+                </Helmet>
+                <ScrollPadding className="flex flex-row container px-2 mx-auto">
+                  <aside className="w-60 pr-2 py-4 flex-grow-0 flex-shrink-0 border-r border-gray-200">
+                    <NavChildren nodes={nav} />
+                  </aside>
 
-                    <div className="overflow-y-auto">
-                      <React.Suspense fallback="">
-                        <div className="px-8 py-4 lg:px-16 max-w-full prose">
-                          <Component></Component>
-                        </div>
-                      </React.Suspense>
-                    </div>
-                  </ScrollMargin>
-                </Route>
-              ))}
-              <Route exact path="/docs">
-                <Redirect to="/docs/tutorials/getting-started" />
+                  <div className="overflow-y-auto">
+                    <React.Suspense fallback="">
+                      <div className="px-8 py-4 lg:px-16 max-w-full prose">
+                        <Component components={mdxDocsComponents}></Component>
+                      </div>
+                    </React.Suspense>
+                  </div>
+                </ScrollPadding>
               </Route>
-              <Route path="/*">
-                <ScrollMargin className="flex flex-row container px-2 mx-auto">
-                  <h1 className="text-8xl">Page not found</h1>
-                </ScrollMargin>
-              </Route>
-            </Switch>
-          </MDXProvider>
+            ))}
+            <Route exact path="/docs">
+              <Redirect to="/docs/tutorials/getting-started" />
+            </Route>
+            <Route path="/*">
+              <ScrollPadding className="flex flex-row container px-2 mx-auto">
+                <h1 className="text-8xl">Page not found</h1>
+              </ScrollPadding>
+            </Route>
+          </Switch>
         </div>
       </div>
     </>
