@@ -6,12 +6,43 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-    - id: deploy
+    - name: Checkout
+      uses: actions/checkout@v2
+
+    - name: Set-up Node.js
+      uses: actions/setup-node@v2
+      with:
+        node-version: '14'
+        registry-url: https://registry.npmjs.org/
+      
+    - name: Install dependencies
+      run: npm ci --no-fund --no-audit
+
+    - name: Build nostalgie.dev
+      run: npm run build
+
+    - name: Setup Cloud SDK
+      uses: google-github-actions/setup-gcloud@v0.2.0
+      with:
+        project_id: ${{ secrets.GCP_PROJECT_ID }}
+        service_account_key: ${{ secrets.GCP_SA_KEY }}
+        export_default_credentials: true  # Set to true to authenticate the Cloud Run action
+
+    - name: Authorize Docker push
+      run: gcloud auth configure-docker
+
+    - name: Build and Push Container
+      run: |-
+        docker build -t gcr.io/${{ secrets.GCP_PROJECT_ID }}/${{ secrets.GCP_CR_SERVICE }}:${{  github.sha }} build/
+        docker push gcr.io/${{ secrets.GCP_PROJECT_ID }}/${{ secrets.GCP_CR_SERVICE }}:${{  github.sha }}
+
+    - name: Deploy to Cloud Run
+      id: deploy
       uses: google-github-actions/deploy-cloudrun@main
       with:
-        image: gcr.io/${{ secrets.GCP_PROJECT_ID }}/nostalgie.dev
+        image: gcr.io/${{ secrets.GCP_PROJECT_ID }}/${{ secrets.GCP_CR_SERVICE }}:${{  github.sha }}
         service: ${{ secrets.GCP_CR_SERVICE }}
-        credentials: ${{ secrets.GCP_SA_KEY }}
-        env_vars: NODE_ENV=production
-        project_id: ${{ secrets.GCP_PROJECT_ID }}
         region: ${{ secrets.GCP_CR_REGION }}
+
+    - name: Show Output
+      run: echo ${{ steps.deploy.outputs.url }}
