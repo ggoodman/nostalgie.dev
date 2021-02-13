@@ -33,7 +33,7 @@ export const nav: NavChildren = [
       {
         kind: NavKind.Page,
         title: GettingStartedTutorial.frontmatter['title'] as string,
-        description: GettingStartedTutorial.excerpt,
+        description: GettingStartedTutorial.frontmatter['description'] as string,
         slug: GettingStartedTutorial.frontmatter['slug'] as string,
         component: React.lazy(() => import('./tutorials/GettingStarted.mdx')),
       },
