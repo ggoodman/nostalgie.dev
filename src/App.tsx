@@ -1,5 +1,5 @@
 import { Helmet } from 'nostalgie/helmet';
-import { Link, Redirect, Route, Switch, useRouteMatch } from 'nostalgie/routing';
+import { Link, Redirect, Route, Switch, useLocation, useRouteMatch } from 'nostalgie/routing';
 import { MDXProviderComponents, styled } from 'nostalgie/styling';
 import * as React from 'react';
 import { nav, NavChildren, NavKind } from './docs';
@@ -13,11 +13,14 @@ const ScrollPadding = styled.div`
 `;
 
 export const mdxDocsComponents: MDXProviderComponents = {
+  code: (props) => {
+    return <code {...props} className="bg-gray-100 rounded-sm px-2 py-1"></code>;
+  },
   blockquote: (props) => (
     <blockquote {...props} className="border-l-8 border-gray-200 bg-gray-100 rounded-md py-1" />
   ),
   img: (props) => <img {...props} className="h-6 inline-block" />,
-  pre: (props) => <pre {...props} className="bg-gray-800 overflow-auto" />,
+  pre: (props) => <pre {...props} className="bg-gray-800 overflow-auto p-0" />,
   ul: (props) => <ul {...props} className="list-disc list-outside ml-8" />,
 };
 
@@ -66,6 +69,17 @@ export default function App() {
     return pages;
   }, [nav]);
 
+  const [sidebarOpen, setSidebarOpen] = React.useState(false);
+  const onClickToggleSidebar = React.useCallback(() => {
+    setSidebarOpen((open) => !open);
+  }, [setSidebarOpen]);
+  const location = useLocation();
+
+  // Close sidebar on page change
+  React.useEffect(() => {
+    setSidebarOpen(false);
+  }, [location.pathname]);
+
   return (
     <>
       <Helmet>
@@ -76,10 +90,12 @@ export default function App() {
         />
       </Helmet>
       <div className="flex flex-col max-h-screen h-screen overflow-hidden">
-        <div className="h-8 border-b border-gray-200">
-          <nav className="container px-2 flex flex-row mx-auto">
-            <div className="w-60 text-xl font-extrabold tracking-wider">
-              <Link to="/">Nostalgie.dev</Link>
+        <div className="h-12 flex flex-col border-b border-gray-200">
+          <nav className="flex-1 container flex flex-row items-end mx-auto z-30">
+            <div className="md:w-60 flex-initial">
+              <Link className="px-4 nostalgie text-3xl font-light tracking-widest" to="/">
+                Nostalgie
+              </Link>
             </div>
             <div className="pl-8 lg:px-16 flex flex-row items-center text-lg font-bold">
               <NavbarLink color="indigo" to="/docs">
@@ -95,20 +111,20 @@ export default function App() {
           <Switch>
             <Route exact path="/">
               <React.Suspense fallback="">
-                <div className="px-2 py-4">
-                  <ScrollPadding className="prose container mx-auto">
+                <ScrollPadding className="prose container mx-auto">
+                  <div className="px-4 py-4">
                     <DocsIndex components={mdxDocsComponents}></DocsIndex>
-                  </ScrollPadding>
-                </div>
+                  </div>
+                </ScrollPadding>
               </React.Suspense>
             </Route>
             <Route exact path="/changelog">
               <React.Suspense fallback="">
-                <div className="px-2 py-4">
-                  <ScrollPadding className="prose container mx-auto">
+                <ScrollPadding className="prose container mx-auto">
+                  <div className="px-4 py-4">
                     <Changelog components={mdxDocsComponents}></Changelog>
-                  </ScrollPadding>
-                </div>
+                  </div>
+                </ScrollPadding>
               </React.Suspense>
             </Route>
             {pages.map(({ Component, path, title, description }) => (
@@ -117,14 +133,29 @@ export default function App() {
                   <title>{`Nostalgie - ${title}`}</title>
                   <meta name="description" content={description} />
                 </Helmet>
-                <ScrollPadding className="flex flex-row container px-2 mx-auto">
-                  <aside className="w-60 pr-2 py-4 flex-grow-0 flex-shrink-0 border-r border-gray-200">
-                    <NavChildren nodes={nav} />
+                <ScrollPadding className="flex flex-col md:flex-row items-stretch container mx-auto relative">
+                  <div
+                    className="md:hidden self-center hover:cursor-pointer hover:opacity-80 fixed right-2 top-3 z-40 bg-white rounded-md p-1 opacity-60"
+                    onClick={onClickToggleSidebar}
+                  >
+                    <svg className="h-6 opacity-100" viewBox="0 0 100 80">
+                      <rect width="100" height="20" rx="8"></rect>
+                      <rect y="30" width="100" height="20" rx="8"></rect>
+                      <rect y="60" width="100" height="20" rx="8"></rect>
+                    </svg>
+                  </div>
+
+                  <aside
+                    className={`w-full md:w-60 fixed top-0 md:static overflow-auto md:overflow-visible h-screen md:h-auto flex-initial border-b md:border-b-0 md:border-r border-gray-200 z-10 flex flex-col ${
+                      sidebarOpen ? '' : 'hidden md:block'
+                    }`}
+                  >
+                    <NavChildren className="flex-1 px-1 py-4 pt-12 md:pt-0 bg-white" nodes={nav} />
                   </aside>
 
-                  <div className="overflow-y-auto">
+                  <div className="overflow-y-auto flex-1">
                     <React.Suspense fallback="">
-                      <div className="px-8 py-4 lg:px-16 max-w-full prose">
+                      <div className="px-4 py-4 lg:px-16 max-w-full prose">
                         <Component components={mdxDocsComponents}></Component>
                       </div>
                     </React.Suspense>
@@ -148,15 +179,17 @@ export default function App() {
 }
 
 const NavChildren = ({
+  className = '',
   depth = 0,
   nodes,
   path = ['', 'docs'],
 }: {
+  className?: string;
   depth?: number;
   nodes: NavChildren;
   path?: string[];
 }) => (
-  <ul className="flex flex-col space-y-1">
+  <ul className={`flex flex-col space-y-1 ${className}`}>
     {nodes.map((node) => {
       switch (node.kind) {
         case NavKind.Page:
@@ -165,7 +198,7 @@ const NavChildren = ({
           return (
             <li
               key={node.slug}
-              className={`text-md font-normal leading-6 px-4 py-1 hover:bg-gray-300
+              className={`text-md font-normal leading-6 px-3 py-1 hover:bg-gray-300
               rounded block ${match ? 'bg-indigo-900 text-gray-100 hover:bg-indigo-700' : ''}`}
             >
               <Link
@@ -182,7 +215,7 @@ const NavChildren = ({
           return (
             <li key={node.slug} className="leading-8">
               <div
-                className="px-4 text-md font-light uppercase tracking-tight"
+                className="px-3 text-md font-light uppercase tracking-tight"
                 style={{ paddingLeft: `${depth + 1}rem` }}
               >
                 {node.title}

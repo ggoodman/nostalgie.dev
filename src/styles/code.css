@@ -1,6 +1,20 @@
 pre[data-lang] {
-  overflow: auto;
   position: relative;
+  overflow: hidden;
+  padding: 0;
+}
+.prose pre[data-lang] {
+  padding: 0;
+}
+
+pre[data-lang]>code {
+  overflow: auto;
+  display: block;
+  padding: 0.857143em 1.14286em;
+}
+
+.prose pre[data-lang]>code {
+  padding: 0.857143em 1.14286em;
 }
 
 pre[data-lang]::before {
@@ -8,16 +22,51 @@ pre[data-lang]::before {
   margin-right: 0;
   text-align: right;
   position: absolute;
-  right: 1rem;
+  right: 1.14286em;
+  top: 0.857143em;
   opacity: 80%;
+  text-shadow: black 0 0 4px;
 }
 
-pre[data-lang="ts"] span[data-line-number]::before,
-pre[data-lang="tsx"] span[data-line-number]::before {
+pre[data-lang='ts'] span[data-line-number]::before,
+pre[data-lang='tsx'] span[data-line-number]::before {
   content: attr(data-line-number);
   opacity: 60%;
   text-align: right;
   float: left;
   padding-right: 0.8em;
   width: 2em;
+}
+
+@import url('https://fonts.googleapis.com/css2?family=Monoton&display=swap&text=N');
+
+.nostalgie {
+  display: inline-block;
+  visibility: hidden;
+  width: 2em;
+}
+
+.nostalgie::first-letter {
+  font-family: 'Monoton', cursive;
+  font-size: 130%;
+  font-weight: normal;
+  text-decoration: underline;
+  text-decoration-color: rgba(67, 56, 202);
+  letter-spacing: normal;
+  margin-right: 4px;
+  visibility: visible;
+}
+
+.container .prose code::after {
+  content: '';
+}
+.container .prose code::before {
+  content: '';
+}
+
+@media (min-width: 768px) {
+  .nostalgie {
+    visibility: visible;
+    width: unset;
+  }
 }

@@ -7,6 +7,25 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [0.74.0] - 2021-02-13
+### Added
+- Added ability to gracefully recover from and log build errors in `dev` mode.
+- Add support for handling server-side redirects triggered by `nostalgie/router`'s `<Redirect />` component (via `react-router`).
+  
+  Whereas before an app without redirects would be fully functional with JavaScript disabled, one with redirects would sit idle on any route intending to trigger a redirect. This change will result in a `302` response with a `Location` header and some (very) simple markup explaining the iminent redirect.
+- Add support for reading and embedding css resources referred-to by URLs.
+  
+  For example, the following is now supported for loading a Google Font:
+  
+  ```css
+  /* The following imports the Monoton font, with _just_ the letter N */
+  @import url('https://fonts.googleapis.com/css2?family=Monoton&display=swap&text=N');
+  ```
+  
+  What is interesting about this is that the above url points to a css file, which _also_ contains a URL `@import` to the actual font file. Nostalgie will import both of these, treating the font file as a base64-encoded uri. The resulting CSS file will be a stand-alone asset that no longer needs to download the font at runtime, avoiding any risk of flash of unstyled text (FOUT).
+  
+  Of course, the trade-off here is that this increases the initial render size so it remains to be seen how this plays out.
+
 ## [0.73.0] - 2021-02-12
 ### Changed
 - Migrated from `@mdx-js/mdx` to `xdm` for a smaller, faster MDX runtime.
@@ -215,7 +234,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Introduced [`kacl`](https://npm.im/@brightcove/kacl) as a mechanism to lint and manage the changelog.
 - Introduced [`gh-release`](https://npm.im/gh-release) to produce releases on GitHub.
 
-[Unreleased]: https://github.com/ggoodman/nostalgie/compare/v0.73.0...HEAD
+[Unreleased]: https://github.com/ggoodman/nostalgie/compare/v0.74.0...HEAD
+[0.74.0]: https://github.com/ggoodman/nostalgie/compare/v0.73.0...v0.74.0
 [0.73.0]: https://github.com/ggoodman/nostalgie/compare/v0.72.1...v0.73.0
 [0.72.1]: https://github.com/ggoodman/nostalgie/compare/v0.72.0...v0.72.1
 [0.72.0]: https://github.com/ggoodman/nostalgie/compare/v0.71.0...v0.72.0
