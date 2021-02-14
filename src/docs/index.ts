@@ -1,5 +1,6 @@
 import type { MDXProps } from 'nostalgie/styling';
 import * as React from 'react';
+import GettingStartedImageUrl from './../img/getting_started.png';
 import * as GettingStartedTutorial from './tutorials/GettingStarted.mdx';
 
 export enum NavKind {
@@ -18,6 +19,7 @@ export interface NavPage {
   kind: NavKind.Page;
   title: string;
   description: string;
+  image?: string;
   slug: string;
   component: React.ElementType<MDXProps>;
 }
@@ -34,6 +36,7 @@ export const nav: NavChildren = [
         kind: NavKind.Page,
         title: GettingStartedTutorial.frontmatter['title'] as string,
         description: GettingStartedTutorial.frontmatter['description'] as string,
+        image: GettingStartedImageUrl,
         slug: GettingStartedTutorial.frontmatter['slug'] as string,
         component: React.lazy(() => import('./tutorials/GettingStarted.mdx')),
       },

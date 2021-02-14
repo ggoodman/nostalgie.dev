@@ -3,7 +3,12 @@ import { Link, Redirect, Route, Switch, useLocation, useRouteMatch } from 'nosta
 import { MDXProviderComponents, styled } from 'nostalgie/styling';
 import * as React from 'react';
 import { nav, NavChildren, NavKind } from './docs';
+import FaviconPath from './img/favicon.ico';
 import './styles/code.css';
+
+type ExtractProps<TComponentOrTProps> = TComponentOrTProps extends React.ComponentType<infer TProps>
+  ? TProps
+  : TComponentOrTProps;
 
 const DocsIndex = React.lazy(() => import('./docs/Index.mdx'));
 const Changelog = React.lazy(() => import('./CHANGELOG.md'));
@@ -24,21 +29,34 @@ export const mdxDocsComponents: MDXProviderComponents = {
   ul: (props) => <ul {...props} className="list-disc list-outside ml-8" />,
 };
 
-function NavbarLink(
-  props: React.PropsWithChildren<{
-    color: 'red' | 'yellow' | 'blue' | 'indigo' | 'purple' | 'pink' | 'green';
-    to: string;
-  }>
-) {
+interface NavbarAnchorProps
+  extends React.PropsWithChildren<React.AnchorHTMLAttributes<HTMLAnchorElement>> {
+  color: 'red' | 'yellow' | 'blue' | 'indigo' | 'purple' | 'pink' | 'green';
+}
+
+function NavbarAnchor({ color, ...props }: NavbarAnchorProps) {
+  const activeClassNames = `border-transparent hover:border-${color}-700`;
+  return (
+    <a
+      {...props}
+      className={`px-4 border-b-4 ${activeClassNames}`}
+      target="_blank"
+      rel="noopener noreferrer"
+    />
+  );
+}
+
+interface NavbarLinkProps extends ExtractProps<Link> {
+  color: 'red' | 'yellow' | 'blue' | 'indigo' | 'purple' | 'pink' | 'green';
+  to: string;
+}
+
+function NavbarLink({ color, ...props }: NavbarLinkProps) {
   const match = useRouteMatch({ exact: false, path: props.to });
   const activeClassNames = match
-    ? `border-${props.color}-700 hover:border-${props.color}-500`
-    : 'border-transparent';
-  return (
-    <Link className={`px-4 border-b-4 ${activeClassNames}`} to={props.to}>
-      {props.children}
-    </Link>
-  );
+    ? `border-${color}-700 hover:border-${color}-500`
+    : `border-transparent hover:border-${color}-700`;
+  return <Link className={`px-4 border-b-4 ${activeClassNames}`} {...props} />;
 }
 
 export default function App() {
@@ -56,6 +74,7 @@ export default function App() {
             Component: node.component,
             title: node.title,
             description: node.description,
+            image: node.image,
           });
           break;
         case NavKind.Section:
@@ -83,6 +102,7 @@ export default function App() {
   return (
     <>
       <Helmet>
+        <link rel="shortcut icon" href={FaviconPath} type="image/x-icon"></link>
         <title>Nostalgie</title>
         <meta
           name="description"
@@ -97,13 +117,27 @@ export default function App() {
                 Nostalgie
               </Link>
             </div>
-            <div className="pl-8 lg:px-16 flex flex-row items-center text-lg font-bold">
+            <div className="pl-8 lg:px-16 flex flex-row items-center space-x-1 text-lg font-bold">
               <NavbarLink color="indigo" to="/docs">
                 Docs
               </NavbarLink>
               <NavbarLink color="green" to="/changelog">
                 Changelog
               </NavbarLink>
+              <NavbarAnchor
+                color="blue"
+                href="https://discord.gg/YQGBrrMy"
+                title="Join the community on Discord!"
+              >
+                Discord
+              </NavbarAnchor>
+              <NavbarAnchor
+                color="red"
+                href="https://github.com/ggoodman/nostalgie"
+                title="Check out Nostalgie on GitHub!"
+              >
+                GitHub
+              </NavbarAnchor>
             </div>
           </nav>
         </div>
@@ -112,7 +146,7 @@ export default function App() {
             <Route exact path="/">
               <React.Suspense fallback="">
                 <ScrollPadding className="prose container mx-auto">
-                  <div className="px-4 py-4">
+                  <div className="px-4 py-6">
                     <DocsIndex components={mdxDocsComponents}></DocsIndex>
                   </div>
                 </ScrollPadding>
@@ -121,17 +155,20 @@ export default function App() {
             <Route exact path="/changelog">
               <React.Suspense fallback="">
                 <ScrollPadding className="prose container mx-auto">
-                  <div className="px-4 py-4">
+                  <div className="px-4 py-6">
                     <Changelog components={mdxDocsComponents}></Changelog>
                   </div>
                 </ScrollPadding>
               </React.Suspense>
             </Route>
-            {pages.map(({ Component, path, title, description }) => (
+            {pages.map(({ Component, path, title, description, image }) => (
               <Route key={path} exact path={path}>
                 <Helmet>
                   <title>{`Nostalgie - ${title}`}</title>
                   <meta name="description" content={description} />
+                  <meta name="og:title" content={title} />
+                  <meta name="og:description" content={description} />
+                  {image ? <meta name="og:image" content={image} /> : null}
                 </Helmet>
                 <ScrollPadding className="flex flex-col md:flex-row items-stretch container mx-auto relative">
                   <div
@@ -155,7 +192,7 @@ export default function App() {
 
                   <div className="overflow-y-auto flex-1">
                     <React.Suspense fallback="">
-                      <div className="px-4 py-4 lg:px-16 max-w-full prose">
+                      <div className="px-4 py-6 lg:px-16 max-w-full prose">
                         <Component components={mdxDocsComponents}></Component>
                       </div>
                     </React.Suspense>
