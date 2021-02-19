@@ -19,13 +19,13 @@ const ScrollPadding = styled.div`
 
 export const mdxDocsComponents: MDXProviderComponents = {
   code: (props) => {
-    return <code {...props} className="bg-gray-100 rounded-sm px-2 py-1"></code>;
+    return <code {...props} className="bg-gray-100 rounded-sm"></code>;
   },
   blockquote: (props) => (
     <blockquote {...props} className="border-l-8 border-gray-200 bg-gray-100 rounded-md py-1" />
   ),
   img: (props) => <img {...props} className="h-6 inline-block" />,
-  pre: (props) => <pre {...props} className="bg-gray-800 overflow-auto p-0" />,
+  pre: (props) => <pre {...props} className="bg-gray-800 overflow-auto py-1" />,
   ul: (props) => <ul {...props} className="list-disc list-outside ml-8" />,
 };
 
@@ -126,7 +126,7 @@ export default function App() {
               </NavbarLink>
               <NavbarAnchor
                 color="blue"
-                href="https://discord.gg/YQGBrrMy"
+                href="https://discord.gg/dSHCnQxbba"
                 title="Join the community on Discord!"
               >
                 Discord
@@ -170,7 +170,7 @@ export default function App() {
                   <meta name="og:description" content={description} />
                   {image ? <meta name="og:image" content={image} /> : null}
                 </Helmet>
-                <ScrollPadding className="flex flex-col md:flex-row items-stretch container mx-auto relative">
+                <ScrollPadding className="flex-1 flex flex-col md:flex-row items-stretch container mx-auto relative">
                   <div
                     className="md:hidden self-center hover:cursor-pointer hover:opacity-80 fixed right-2 top-3 z-40 bg-white rounded-md p-1 opacity-60"
                     onClick={onClickToggleSidebar}
