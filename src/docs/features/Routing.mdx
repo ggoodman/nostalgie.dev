@@ -6,7 +6,7 @@ Currently, the routing support in Nostalgie is a direct export of a subset of th
 
 Nostalgie integrates deeply with `react-router-dom` and as such, there is no need to wrap your app in a `<BrowserRouter />`. Your page will be automatically wrapped with a `<BrowserRouter>` during CSR and it will be wrapped with a `<StaticRouter>` during SSR.
 
-```tsx emphasize:7-8 emphasize:11-19
+```tsx emphasize:7-8 emphasize:11-19 lines
 import { Link, Route, Switch } from 'nostalgie/routing';
 
 export default function App() {
