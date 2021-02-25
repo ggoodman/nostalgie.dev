@@ -19,7 +19,7 @@ function NavbarAnchor({ color, ...props }: NavbarAnchorProps) {
   return (
     <a
       {...props}
-      className={`px-4 border-b-4 ${activeClassNames}`}
+      className={`px-1 sm:px-4 border-b-4 ${activeClassNames}`}
       target="_blank"
       rel="noopener noreferrer"
     />
@@ -36,7 +36,7 @@ function NavbarLink({ color, ...props }: NavbarLinkProps) {
   const activeClassNames = match
     ? `border-${color}-700 hover:border-${color}-500`
     : `border-transparent hover:border-${color}-700`;
-  return <Link className={`px-4 border-b-4 ${activeClassNames}`} {...props} />;
+  return <Link className={`px-1 sm:px-4 border-b-4 ${activeClassNames}`} {...props} />;
 }
 
 export default function App() {
@@ -58,7 +58,7 @@ export default function App() {
                 Nostalgie
               </Link>
             </div>
-            <div className="pl-8 lg:px-16 flex flex-row items-center space-x-1 text-lg font-bold">
+            <div className="pl-2 sm:pl-8 lg:px-16 flex flex-row items-center space-x-1 md:text-lg font-bold">
               <NavbarLink color="indigo" to="/docs">
                 Docs
               </NavbarLink>

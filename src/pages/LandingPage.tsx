@@ -21,22 +21,22 @@ export default function LandingPage() {
             apps and web pages using react.
           </p>
         </header>
-        <div className="flex items-center space-x-4 mb-10">
+        <div className="flex flex-col md:flex-row items-center space-x-4 space-y-4 mb-10">
           <Link
             to="/docs/tutorials/getting-started"
             className="px-5 py-3 bg-purple-700 text-gray-50 block rounded-lg text-xl font-bold"
           >
             Get started
           </Link>
-          <pre className="bg-gray-100 text-xl text-gray-800 px-5 py-3 rounded-lg w-3/4">
+          <pre className="bg-gray-100 md:text-xl text-gray-800 px-5 py-3 rounded-lg w-full md:w-3/4">
             <code>npx create-nostalgie-app my-app</code>
           </pre>
         </div>
-        <p className="text-gray-600 max-w-screen-lg text-xl sm:text-3xl sm:leading-10 font-light italic mb-32">
+        <p className="text-gray-600 max-w-screen-lg text-xl sm:text-3xl sm:leading-10 font-light italic mb-20 md:mb-32">
           Try it. You're less than 30 seconds away from that feeling you thought you had lost
           forever.
         </p>
-        <div className="mb-32 w-3/5">
+        <div className="mb-20 md:mb-32 w-full lg:w-3/5">
           <h2 className="sm:text-lg sm:leading-snug font-semibold tracking-wide uppercase text-purple-600 mb-3">
             Opinionated
           </h2>
@@ -51,7 +51,7 @@ export default function LandingPage() {
           </p>
           <OpinionatedCode className="rounded-lg" />
         </div>
-        <div className="mb-32 w-3/5">
+        <div className="mb-20 md:mb-32 w-full lg:w-3/5">
           <h2 className="sm:text-lg sm:leading-snug font-semibold tracking-wide uppercase text-red-600 mb-3">
             Server Functions
           </h2>
@@ -69,7 +69,7 @@ export default function LandingPage() {
           <FunctionClientCode className="rounded-lg" />
         </div>
         <div className="mb-20">
-          <div className="w-3/5 mb-8">
+          <div className="w-full lg:w-3/5 mb-8">
             <h2 className="sm:text-lg sm:leading-snug font-semibold tracking-wide uppercase text-blue-600 mb-3">
               Complete
             </h2>
