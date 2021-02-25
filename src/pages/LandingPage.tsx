@@ -21,7 +21,7 @@ export default function LandingPage() {
             apps and web pages using react.
           </p>
         </header>
-        <div className="flex flex-col md:flex-row items-center space-x-4 space-y-4 mb-10">
+        <div className="flex flex-col md:flex-row items-center md:space-x-4 space-y-4 md:space-y-0 mb-10">
           <Link
             to="/docs/tutorials/getting-started"
             className="px-5 py-3 bg-purple-700 text-gray-50 block rounded-lg text-xl font-bold"
