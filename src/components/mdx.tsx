@@ -164,6 +164,14 @@ export const P = ({
   <StyledP className={combineClasses('', className)} {...props} />
 );
 
+const StyledLi = styled.li({});
+export const Li = ({
+  className,
+  ...props
+}: React.LiHTMLAttributes<HTMLLIElement> & { ref?: React.Ref<HTMLLIElement> }) => (
+  <StyledLi className={combineClasses('', className)} {...props} />
+);
+
 const StyledUl = styled.ul({
   '& > li': {
     position: 'relative',
@@ -214,6 +222,7 @@ export const mdx: MDXProviderComponents = {
   h4: H4,
   img: Img,
   hr: Hr,
+  li: Li,
   p: P,
   ul: Ul,
 };
