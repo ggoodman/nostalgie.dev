@@ -34,7 +34,7 @@ export default function LandingPage() {
           Try it. You're less than 30 seconds away from that feeling you thought you had lost
           forever.
         </p>
-        <div className="mb-20 md:mb-32 w-full lg:w-3/5">
+        <div id="opinionated" className="mb-20 md:mb-32 w-full lg:w-3/5">
           <h2 className="sm:text-lg sm:leading-snug font-semibold tracking-wide uppercase text-purple-600 mb-3">
             Opinionated
           </h2>
@@ -49,7 +49,7 @@ export default function LandingPage() {
           </p>
           <OpinionatedCode className="rounded-lg" />
         </div>
-        <div className="mb-20 md:mb-32 w-full lg:w-3/5">
+        <div id="server-functions" className="mb-20 md:mb-32 w-full lg:w-3/5">
           <h2 className="sm:text-lg sm:leading-snug font-semibold tracking-wide uppercase text-red-600 mb-3">
             Server Functions
           </h2>
@@ -66,10 +66,10 @@ export default function LandingPage() {
           <H3>Browser</H3>
           <FunctionClientCode className="rounded-lg" />
         </div>
-        <div className="mb-20">
+        <div id="features" className="mb-20">
           <div className="w-full lg:w-3/5 mb-8">
             <h2 className="sm:text-lg sm:leading-snug font-semibold tracking-wide uppercase text-blue-600 mb-3">
-              Complete
+              Features
             </h2>
             <p className="text-3xl sm:text-5xl lg:text-6xl leading-none font-extrabold text-gray-900 tracking-tight mb-8">
               Nostalgie has you covered for the critical parts of your app.

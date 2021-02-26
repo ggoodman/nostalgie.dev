@@ -1,9 +1,17 @@
+///<reference lib="dom" />
+
 import { Markup } from 'nostalgie/markup';
 import { Link, Redirect, Route, Switch, useLocation, useRouteMatch } from 'nostalgie/routing';
 import * as React from 'react';
 import { mdxDocsComponents } from '../components/mdx';
 import { ScrollPadding } from '../components/ScrollPadding';
 import { nav, NavChildren, NavKind } from '../docs';
+
+declare global {
+  interface ImportMeta {
+    url: string;
+  }
+}
 
 export default function DocsPages() {
   const pages = React.useMemo(() => {
