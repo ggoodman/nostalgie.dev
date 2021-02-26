@@ -1,4 +1,4 @@
-import { Helmet } from 'nostalgie/helmet';
+import { Markup } from 'nostalgie/markup';
 import { Link, Redirect, Route, Switch, useLocation, useRouteMatch } from 'nostalgie/routing';
 import * as React from 'react';
 import { mdxDocsComponents } from '../components/mdx';
@@ -49,13 +49,15 @@ export default function DocsPages() {
     <Switch>
       {pages.map(({ Component, path, title, description, image }) => (
         <Route key={path} exact path={path}>
-          <Helmet>
+          <Markup>
             <title>{`Nostalgie - ${title}`}</title>
             <meta name="description" content={description} />
             <meta property="og:title" content={title} />
             <meta property="og:description" content={description} />
-            {image ? <meta property="og:image" content={image} /> : null}
-          </Helmet>
+            {image ? (
+              <meta property="og:image" content={new URL(image, import.meta.url).href} />
+            ) : null}
+          </Markup>
           <ScrollPadding className="flex-1 flex flex-col md:flex-row items-stretch container mx-auto relative">
             <div
               className="md:hidden self-center hover:cursor-pointer hover:opacity-80 fixed right-2 top-3 z-40 bg-white rounded-md p-1 opacity-60"

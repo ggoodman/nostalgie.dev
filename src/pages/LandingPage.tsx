@@ -6,8 +6,6 @@ import * as React from 'react';
 import { H3, Li, P, Ul } from '../components/mdx';
 import { ScrollPadding } from '../components/ScrollPadding';
 
-const Index = React.lazy(() => import('../docs/Index.mdx'));
-
 export default function LandingPage() {
   return (
     <ScrollPadding className="container mx-auto antialiased">

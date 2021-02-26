@@ -1,7 +1,7 @@
 import type { MDXProps } from 'nostalgie/styling';
 import * as React from 'react';
-import GettingStartedImageUrl from './../img/getting_started.png';
 import * as GettingStartedTutorial from './tutorials/GettingStarted.mdx';
+import GettingStartedImageUrl from './tutorials/GettingStarted/getting_started.png';
 
 export enum NavKind {
   Section,

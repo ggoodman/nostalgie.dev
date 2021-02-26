@@ -1,4 +1,4 @@
-import { Helmet } from 'nostalgie/helmet';
+import { Markup } from 'nostalgie/markup';
 import { Link, Route, Switch, useRouteMatch } from 'nostalgie/routing';
 import * as React from 'react';
 import FaviconPath from './img/favicon.ico';
@@ -42,14 +42,14 @@ function NavbarLink({ color, ...props }: NavbarLinkProps) {
 export default function App() {
   return (
     <>
-      <Helmet>
+      <Markup>
         <link rel="shortcut icon" href={FaviconPath} type="image/x-icon"></link>
         <title>Nostalgie</title>
         <meta
           name="description"
           content="Nostalgie is an opinionated, full-stack, runtime-agnostic framework for building web apps and web pages using React."
         />
-      </Helmet>
+      </Markup>
       <div className="flex flex-col max-h-screen h-screen overflow-hidden">
         <div className="h-12 flex flex-col border-b border-gray-200">
           <nav className="flex-1 container flex flex-row items-end mx-auto z-30">
