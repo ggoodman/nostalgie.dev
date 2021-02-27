@@ -83,6 +83,27 @@ export const nav: NavChildren = [
   },
   {
     kind: NavKind.Section,
+    title: 'Reference',
+    slug: 'reference',
+    children: [
+      {
+        kind: NavKind.Page,
+        title: 'Server Functions',
+        description: 'Discover the API for loading data and calling server-side logic.',
+        slug: 'functions',
+        component: React.lazy(() => import('./reference/Functions.mdx')),
+      },
+      {
+        kind: NavKind.Page,
+        title: 'Lazy Loading',
+        description: 'Discover the API for lazy loading components and for code-splitting.',
+        slug: 'lazy',
+        component: React.lazy(() => import('./reference/Lazy.mdx')),
+      },
+    ],
+  },
+  {
+    kind: NavKind.Section,
     title: 'Discussions',
     slug: 'discussions',
     children: [

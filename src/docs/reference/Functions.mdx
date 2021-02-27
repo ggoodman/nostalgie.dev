@@ -1,0 +1,34 @@
+# nostalgie/functions
+
+The `nostalgie/functions` package exposes some tools to easily interact with [Server Functions](/docs/features/functions).
+
+> **IMPORTANT**: The `useQueryFunction` and `useMutationFunction` hooks _must_ be invoked with an actual reference to the Server Function that you want to invoke. Don't worry though, the Server Function and its dependencies won't actually be included in your front-end bundles. The Nostalgie compiler takes care of swapping out the actual function with an internal representation at build time.
+>
+> Using a reference to the actual function allows us to give rich type hinting on the shape of required arguments and on the data ultimately returned by the function. It also means that information is equally available to JavaScript and TypeScript users working in an environment with the TypeScript language services.
+
+## `useQueryFunction(queryFunction, args, [options])`
+
+A [React Hook](https://reactjs.org/docs/hooks-reference.html) that returns a *live* observer of the result of invoking a Server Function. Dependending on the options used, this may return cached ('stale') data from a previous invocation or even an invocation that happened during server rendering.
+
+- `queryFunction` - a reference to the _actual_ Server Function that you want to invoke.
+- `args` - an array of arguments that will be passed to the Server Function. These must be serializable to JSON as they may sometimes be passed via HTTP request.
+- `options` - optional configuration for the query, which are identical to [`useQuery` options in `react-query`](https://react-query.tanstack.com/reference/useQuery)
+except that `queryKey` and `queryFn` cannot be provided as Nostalgie will determine these automatically.
+
+Returns the query observer object [returned by `useQuery`](https://react-query.tanstack.com/reference/useQuery). Please refer to the (excellent) [`react-query` documentation](https://react-query.tanstack.com/overview) for more information.
+
+
+## `useMutationFunction(queryFunction, [options])`
+
+A [React Hook](https://reactjs.org/docs/hooks-reference.html) that returns a *live* observer of the a mutating Server Function. The server function will not be invoked until the `.mutate()` method is invoked.
+
+- `queryFunction` - a reference to the _actual_ Server Function that you want to invoke.
+- `options` - optional configuration for the query, which are identical to [`useMutation` options in `react-query`](https://react-query.tanstack.com/reference/useMutation)
+except that `mutationFn` cannot be provided as Nostalgie will determine it automatically.
+  - `mutate(args)` - invoke the mutation function in the background, where:
+    - `args` - an array of arguments that will be passed to the Server Function. These must be serializable to JSON as they may sometimes be passed via HTTP request.
+  - `mutateAsync(args)` - invoke the mutation function, returning a `Promise` for its outcome, where:
+    - `args` - an array of arguments that will be passed to the Server Function. These must be serializable to JSON as they may sometimes be passed via HTTP request.
+
+Returns the mutation observer object [returned by `useMutation`](https://react-query.tanstack.com/reference/useMutation). Please refer to the (excellent) [`react-query` documentation](https://react-query.tanstack.com/overview) for more information.
+
