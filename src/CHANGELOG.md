@@ -7,6 +7,42 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [0.77.3] - 2021-03-01
+### Changed
+- Reinstated the worker pool for `.md` / `.mdx` compilation. This attempts to spread the the work of transpiling mdx across multiple workers.
+
+### Fixed
+- Fixed invocation of server functions that do not return `Promise` instances by calling them in the handler of a resolved promise.
+
+## [0.77.2] - 2021-02-27
+### Fixed
+- Revert chunk paths in nostalgie build while a bug in their resolution is investigated.
+
+## [0.77.1] - 2021-02-27
+### Changed
+- Moved MDX building into the main CLI process (for now) in an attempt to simplify some of the diagnostics via esbuild.
+
+## [0.77.0] - 2021-02-26
+### Changed
+- **BREAKING** Renamed the `nostalgie/helmet` runtime module to `nostalgie/markup` to better reflect its purpose: affecting the generated markup. The `Helmet`, `HelmetProps` and `HelmetTags` have been renamed to `Markup`, `MarkupProps` and `MarkupTags`, respectively.
+  
+  As a reminder, the `nostalgie/markup` module is your one-stop shop to set the page title, meta tags or other markup-related features:
+  
+  ```tsx
+  import { Markup } from "nostalgie/markup";
+  
+  export function MyPage() {
+    return (
+      <>
+        <Markup>
+          <title>My page title</title>
+        </Markup>
+        <h1>My page</h1>
+      </>
+    );
+  }
+  ```
+
 ## [0.76.0] - 2021-02-23
 ### Added
 - Improved typing and behaviour of the `styled` helper function.
@@ -371,7 +407,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Introduced [`kacl`](https://npm.im/@brightcove/kacl) as a mechanism to lint and manage the changelog.
 - Introduced [`gh-release`](https://npm.im/gh-release) to produce releases on GitHub.
 
-[Unreleased]: https://github.com/ggoodman/nostalgie/compare/v0.76.0...HEAD
+[Unreleased]: https://github.com/ggoodman/nostalgie/compare/v0.77.3...HEAD
+[0.77.3]: https://github.com/ggoodman/nostalgie/compare/v0.77.2...v0.77.3
+[0.77.2]: https://github.com/ggoodman/nostalgie/compare/v0.77.1...v0.77.2
+[0.77.1]: https://github.com/ggoodman/nostalgie/compare/v0.77.0...v0.77.1
+[0.77.0]: https://github.com/ggoodman/nostalgie/compare/v0.76.0...v0.77.0
 [0.76.0]: https://github.com/ggoodman/nostalgie/compare/v0.75.1...v0.76.0
 [0.75.1]: https://github.com/ggoodman/nostalgie/compare/v0.75.0...v0.75.1
 [0.75.0]: https://github.com/ggoodman/nostalgie/compare/v0.74.0...v0.75.0
