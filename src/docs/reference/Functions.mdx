@@ -1,3 +1,7 @@
+import { ResourceUsage } from './Functions/ResourceUsage';
+import ResourceUsageComponentCode from 'code:./Functions/ResourceUsage';
+import ResourceUsageFunctionCode from 'code:./Functions/functions';
+
 # nostalgie/functions
 
 The `nostalgie/functions` package exposes some tools to easily interact with [Server Functions](/docs/features/functions).
@@ -8,27 +12,40 @@ The `nostalgie/functions` package exposes some tools to easily interact with [Se
 
 ## `useQueryFunction(queryFunction, args, [options])`
 
-A [React Hook](https://reactjs.org/docs/hooks-reference.html) that returns a *live* observer of the result of invoking a Server Function. Dependending on the options used, this may return cached ('stale') data from a previous invocation or even an invocation that happened during server rendering.
+A [React Hook](https://reactjs.org/docs/hooks-reference.html) that returns a _live_ observer of the result of invoking a Server Function. Dependending on the options used, this may return cached ('stale') data from a previous invocation or even an invocation that happened during server rendering.
 
 - `queryFunction` - a reference to the _actual_ Server Function that you want to invoke.
 - `args` - an array of arguments that will be passed to the Server Function. These must be serializable to JSON as they may sometimes be passed via HTTP request.
 - `options` - optional configuration for the query, which are identical to [`useQuery` options in `react-query`](https://react-query.tanstack.com/reference/useQuery)
-except that `queryKey` and `queryFn` cannot be provided as Nostalgie will determine these automatically.
+  except that `queryKey` and `queryFn` cannot be provided as Nostalgie will determine these automatically.
 
 Returns the query observer object [returned by `useQuery`](https://react-query.tanstack.com/reference/useQuery). Please refer to the (excellent) [`react-query` documentation](https://react-query.tanstack.com/overview) for more information.
+
+### Example: Render the result of a Server Function
+
+In this example, we want to show the result of calling `process.resourceUsage()` in the browser and refresh this value periodically.
+
+**./src/functions.js**:
+<ResourceUsageFunctionCode />
+
+
+**./src/ResourceUsage.jsx**:
+<ResourceUsageComponentCode />
+
+
+**Live result**:
+<ResourceUsage />
 
 
 ## `useMutationFunction(queryFunction, [options])`
 
-A [React Hook](https://reactjs.org/docs/hooks-reference.html) that returns a *live* observer of the a mutating Server Function. The server function will not be invoked until the `.mutate()` method is invoked.
+A [React Hook](https://reactjs.org/docs/hooks-reference.html) that returns a _live_ observer of the a mutating Server Function. The server function will not be invoked until the `.mutate()` method is invoked.
 
 - `queryFunction` - a reference to the _actual_ Server Function that you want to invoke.
-- `options` - optional configuration for the query, which are identical to [`useMutation` options in `react-query`](https://react-query.tanstack.com/reference/useMutation)
-except that `mutationFn` cannot be provided as Nostalgie will determine it automatically.
+- `options` - optional configuration for the query, which are identical to [`useMutation` options in `react-query`](https://react-query.tanstack.com/reference/useMutation) except that `mutationFn` cannot be provided as Nostalgie will determine it automatically.
   - `mutate(args)` - invoke the mutation function in the background, where:
     - `args` - an array of arguments that will be passed to the Server Function. These must be serializable to JSON as they may sometimes be passed via HTTP request.
   - `mutateAsync(args)` - invoke the mutation function, returning a `Promise` for its outcome, where:
     - `args` - an array of arguments that will be passed to the Server Function. These must be serializable to JSON as they may sometimes be passed via HTTP request.
 
 Returns the mutation observer object [returned by `useMutation`](https://react-query.tanstack.com/reference/useMutation). Please refer to the (excellent) [`react-query` documentation](https://react-query.tanstack.com/overview) for more information.
-

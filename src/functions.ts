@@ -1,1 +1,1 @@
-export function helloWorld() {}
+export { getResourceUsage } from './docs/reference/Functions/functions';

@@ -98,7 +98,7 @@ export const nav: NavChildren = [
         title: 'Lazy Loading',
         description: 'Discover the API for lazy loading components and for code-splitting.',
         slug: 'lazy',
-        component: React.lazy(() => import('./reference/Lazy.mdx')),
+        component: React.lazy(() => import('./reference/Lazy.md')),
       },
     ],
   },
