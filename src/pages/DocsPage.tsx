@@ -62,9 +62,7 @@ export default function DocsPages() {
             <meta name="description" content={description} />
             <meta property="og:title" content={title} />
             <meta property="og:description" content={description} />
-            {image ? (
-              <meta property="og:image" content={new URL(image, import.meta.url).href} />
-            ) : null}
+            {image ? <meta property="og:image" content={image} /> : null}
           </Markup>
           <ScrollPadding className="flex-1 flex flex-col md:flex-row items-stretch container mx-auto relative">
             <div
